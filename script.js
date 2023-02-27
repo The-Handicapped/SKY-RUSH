@@ -134,18 +134,43 @@ scene('game', () => {
         'startFloor'
     ])
 
+    // stores the last position of the sprite
+    let lastPosY = player.pos.y;
+
+    //Store the y position of the highest platform so we can determine the possible y positions when we create a new platform
+    let highestPlatformY = height();
+    let curHeight = height();
+
     const platform = () => {
         if (currentScene === "game") {
-            add([
-                rect(Math.floor(Math.random() * 200) + 100, 10),
-                pos(Math.floor(Math.random() * width()), - 10),
-                origin('center'),
-                area(),
-                color('black'),
-                solid(),
-                move(DOWN, 100),
-                'platformTag'
-            ])
+            // add([
+            //     rect(Math.floor(Math.random() * 200) + 100, 10),
+            //     pos(Math.floor(Math.random() * width()), - 10),
+            //     origin('center'),
+            //     area(),
+            //     color('black'),
+            //     solid(),
+            //     move(DOWN, 100),
+            //     'platformTag'
+            // ])
+
+            let newPlatform = add([
+                rect(100, 10),
+                origin("center"),
+                color(rgb(1, 1, 1)),
+                // (random position left to right, random position top to bottom)
+                pos(
+                    rand(20, width() - 20),
+                    curHeight - 80
+                ),
+                "platformTag"
+            ]);
+            //increment cur height so each platform is one above the other
+            curHeight -= 80;
+            // 
+            if (newPlatform.pos.y < highestPlatformY) {
+                highestPlatformY = newPlatform.pos.y;
+            }
         }
     }
 
@@ -164,11 +189,15 @@ scene('game', () => {
         every('platformTag', (platforms) => {
             destroy(platforms);
         });
-        clearInterval(platformGenerator);
+        // clearInterval(platformGenerator);
         go('gameOver');
     })
 
-    let platformGenerator = setInterval(platform, 1000);
+    // Creates 10 platforms
+    for (let i = 0; i < 10; i++) {
+        platform();
+    }
+    // let platformGenerator = setInterval(platform, 1000);
 
     player.onUpdate(() => {
         if (player.pos.x >= width()) {
@@ -179,14 +208,29 @@ scene('game', () => {
         }
     })
 
-    player.onUpdate(() => {
-        if (player.isGrounded()) {
-            player.jump();
-            play('boing')
-        }
-    })
+    // player jump change
+    onUpdate(() => {
+        lastPosY = player.pos.y;
+    });
 
-    gravity(900);
+    player.onUpdate("platformTag", () => {
+        if (player.pos.y > lastPosY) {
+            player.jump(650);
+        }
+    });
+
+    // onUpdate(() => {
+    //     camPos({ x: width() / 2, y: player.pos.y });
+    // });
+   
+    // player.onUpdate(() => {
+    //     if (player.isGrounded()) {
+    //         player.jump(650);
+    //         play('boing')
+    //     }
+    // })
+
+    // gravity(900);
 
     let SPEED = 900;
 
