@@ -10,17 +10,59 @@ kaboom({
 loadSound('boing', 'boing.mp3');
 loadSprite("stick", "stick.png");
 loadSprite("bg", "bg.jpg");
+loadSprite('logo', 'Logo.png')
 
 scene('start', () => {
     currentScene = 'start';
+    let background = add([
+        sprite("bg", {
+            width: width(),
+            height: height()
+        }),
+        z(0)
+    ])
+
+    let currTab = true;
+
+    const clouds = () => {
+        if (currentScene === "start" && currTab) {
+            add([
+                rect(100, 10),
+                pos(width(), Math.floor(Math.random() * height())),
+                origin('center'),
+                area(),
+                move(LEFT, 50),
+                z(1)
+            ])
+        }
+    }
+
+    clouds()
+    let cloudGenerator = setInterval(clouds, 5000);
+
+    let logo = add([
+        sprite('logo'),
+        pos(width() / 2, height() / 4),
+        origin('center'),
+        scale(.3, .3),
+        z(2)
+    ])
     let startButton = add([
         text('Click here to start'),
         pos(width() / 2, height() / 2),
         origin('center'),
         scale(.5, .5),
         area(),
+        z(2),
         'start'
     ])
+
+    window.addEventListener("blur", () => {
+        currTab = false;
+    });
+    window.addEventListener("focus", () => {
+        currTab = true;
+    });
 
     startButton.onClick(() => {
         go('game')
@@ -99,6 +141,7 @@ scene('game', () => {
                 pos(Math.floor(Math.random() * width()), - 10),
                 origin('center'),
                 area(),
+                color('black'),
                 solid(),
                 move(DOWN, 100),
                 'platformTag'
@@ -108,7 +151,7 @@ scene('game', () => {
 
     floor.onCollide("platformTag", (platform) => {
         destroy(platform);
-        score++;
+        score += 100;
         scoreBoard.text = score;
     })
 
