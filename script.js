@@ -96,7 +96,7 @@ scene('game', () => {
         if (currentScene === "game") {
             add([
                 rect(Math.floor(Math.random() * 200) + 100, 10),
-                pos(Math.floor(Math.random() * width()), 0),
+                pos(Math.floor(Math.random() * width()), - 10),
                 origin('center'),
                 area(),
                 solid(),
