@@ -214,6 +214,9 @@ scene('game', () => {
     });
 
     player.onUpdate(() => {
+        camPos() = player.pos
+    })
+    player.onUpdate(() => {
         if (player.pos.y > lastPosY) {
             player.jump(650);
         }
