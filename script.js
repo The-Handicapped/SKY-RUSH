@@ -213,7 +213,7 @@ scene('game', () => {
         lastPosY = player.pos.y;
     });
 
-    player.onUpdate("platformTag", () => {
+    player.onUpdate(() => {
         if (player.pos.y > lastPosY) {
             player.jump(650);
         }
@@ -222,7 +222,7 @@ scene('game', () => {
     // onUpdate(() => {
     //     camPos({ x: width() / 2, y: player.pos.y });
     // });
-   
+
     // player.onUpdate(() => {
     //     if (player.isGrounded()) {
     //         player.jump(650);
