@@ -134,6 +134,8 @@ scene('game', () => {
         'startFloor'
     ])
 
+    let lastPosY = player.pos.y;
+
     const platform = () => {
         if (currentScene === "game") {
             add([
@@ -141,12 +143,22 @@ scene('game', () => {
                 pos(Math.floor(Math.random() * width()), 0),
                 origin('center'),
                 area(),
-                solid(),
+                // solid(),
                 move(DOWN, 100),
                 'platformTag'
             ])
         }
     }
+
+    onUpdate(() => {
+        lastPosY = player.pos.y;
+      });
+
+    player.onCollide("platformTag", () => {
+        if (player.pos.y > lastPosY) {
+          player.jump(500);
+        }
+      });
 
     floor.onCollide("platformTag", (platform) => {
         destroy(platform);
@@ -178,30 +190,39 @@ scene('game', () => {
         }
     })
 
-    player.onUpdate(() => {
-        if (player.isGrounded()) {
-            player.jump();
-            play('boing')
-        }
-    })
+    // player.onUpdate(() => {
+    //     if (player.isGrounded()) {
+    //         player.jump();
+    //         play('boing')
+    //     }
+    // })
 
     gravity(900);
 
-    let SPEED = 900;
+    // let SPEED = 900;
+
+    player.onCollide('startFloor', () => {
+        onKeyDown("space", () => {
+            player.jump(650);
+        })
+    })
+    // onKeyDown("space", () => {
+    //     player.jump(650);
+    // })
 
     onKeyDown("left", () => {
-        player.move(-SPEED, 0);
+        player.move(-400, 0);
     })
 
     onKeyDown("a", () => {
-        player.move(-SPEED, 0);
+        player.move(-400, 0);
     })
 
     onKeyDown("right", () => {
-        player.move(SPEED, 0)
+        player.move(400, 0)
     })
 
     onKeyDown("d", () => {
-        player.move(SPEED, 0)
+        player.move(400, 0)
     })
 })
