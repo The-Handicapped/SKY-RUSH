@@ -8,14 +8,17 @@ kaboom({
 });
 loadSound('boing', 'sounds/boing.mp3');
 loadSound('bgMusic', 'sounds/backgroundMusic.mp3');
-loadSound('woosh', 'sounds/woosh.flac')
+loadSound('woosh', 'sounds/woosh.flac');
+loadSound('death', 'sounds/death.wav');
+loadSound('scream', 'sounds/scream.mp3');
 loadSprite("stick", "sprites/stick.png");
 loadSprite("bg", "sprites/bg.jpg");
 loadSprite('gameOverBg', 'sprites/heaven.jpg')
 loadSprite('logo', 'sprites/Logo.png');
 loadSprite('homeStick', 'sprites/homeStick.png');
 loadSprite('cloud', 'sprites/cloud.png');
-loadSprite('halo', 'sprites/halo.png')
+loadSprite('halo', 'sprites/halo.png');
+loadSprite('yellowEnemy', 'sprites/yellowEnemy.png')
 let highScore = 0;
 let score = 0
 scene('start', () => {
@@ -90,6 +93,9 @@ scene('start', () => {
 go('start')
 scene('gameOver', () => {
     currentScene = 'gameOver';
+    let death = play('death', {
+        volume: 0.6
+    })
     let bg = add([
         sprite("gameOverBg", {
             width: width() * 2,
@@ -153,19 +159,20 @@ scene('gameOver', () => {
         text('Press Enter To Try Again'),
         pos(width() / 2, height() / 4  -25),
         origin('center'),
-        scale(.4, .4),
+         scale(.4, .4),
         area(),
         'start'
     ])
     onKeyPress('enter',() => {
-        go('game')
+        death.stop();
+        go('game');
     });
 });
-scene('game', () => {
-    // play('bgMusic', {
-    //     loop: true,
-    //     volume: 0.4
-    // })
+scene('game', () => { 
+    let bgMusic = play('bgMusic', {
+        loop: true,
+        volume: 0.4
+    })
     currentScene = 'game';
     let deathCounter = 0;
     let firstJump = true;
@@ -203,6 +210,7 @@ scene('game', () => {
                 destroy(platforms);
             });
             clearInterval(platformGenerator);
+            bgMusic.stop();
             go('gameOver');
         }
         else if (deathCounter === 6 && firstJump) {
@@ -211,6 +219,7 @@ scene('game', () => {
                 destroy(platforms);
             });
             clearInterval(platformGenerator);
+            bgMusic.stop();
             go('gameOver');
         }
     }, 1000)
@@ -260,7 +269,7 @@ scene('game', () => {
                     'boostPlatformTag'
                 ]);
             }
-            
+             
             else if ((random === 3) && (score >= 500)) {
                 add([
                     // sprite('cloud'),
@@ -274,6 +283,32 @@ scene('game', () => {
                     // move(DOWN, 100),
                     'oncePlatformTag'
                 ]);
+            }
+
+            else if ((random === 7) && (score >= 500)) {
+                let widthSize = Math.floor(Math.random() * 150) + 100;
+                let widthPos = Math.floor(Math.random() * width())
+                add([
+                    // sprite('cloud'),
+                    // scale(.03,.03),
+                    rect(widthSize, 10),
+                    pos(widthPos, currHeight - 115),
+                    origin('center'),
+                    area(),
+                    color(rgb(220,20,60)),
+                    // solid(),
+                    // move(DOWN, 100),
+                    'enemyPlatformTag'
+                ]);
+                add([
+                    sprite('yellowEnemy'),
+                    pos(widthPos, currHeight - 130),
+                    origin('center'),
+                    scale(.1,.1),
+                    area(),
+                    solid(),
+                    'enemy'
+                ])
             }
             //   
             else {
@@ -317,8 +352,26 @@ scene('game', () => {
             })
         }
     });
+    
+    let enemy = get('enemy');
+    onUpdate(() => {
+        if(player.pos.y === enemy.pos.y && player.pos.x === enemy.pos.x){
+            destroy(player);
+            go('gameOver');
+        }
+    })
 
-    player.onCollide("movingPlatformTag", () => {
+
+
+    // player.onCollide("movingPlatformTag", () => {
+    //     if (player.pos.y > lastPosY) {
+    //         player.jump(500);
+    //         firstJump = false;
+    //         deathCounter = 0;
+    //     }
+    // });
+
+    player.onCollide("enemyPlatformTag", (platform) => {
         if (player.pos.y > lastPosY) {
             player.jump(500);
             firstJump = false;
@@ -365,7 +418,7 @@ scene('game', () => {
             player.pos.x = width();
         }
     });
-    let moving = get('movingPlatformTag');
+    // let moving = get('movingPlatformTag');
 
     // player.onUpdate(() => {
     //     if (player.isGrounded()) {
