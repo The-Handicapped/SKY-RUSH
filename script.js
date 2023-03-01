@@ -326,6 +326,15 @@ scene('game', () => {
         }
     });
 
+    player.onCollide("oncePlatformTag", (platform) => {
+        if (player.pos.y > lastPosY) {
+            player.jump(500);
+            firstJump = false;
+            deathCounter = 0;
+            destroy(platform);
+        }
+    });
+
     floor.onCollide("platformTag", (platform) => {
         destroy(platform);
         score += 100;
