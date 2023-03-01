@@ -13,6 +13,8 @@ loadSprite("bg", "sprites/bg.jpg");
 loadSprite('logo', 'sprites/Logo.png');
 loadSprite('homeStick', 'sprites/homeStick.png');
 loadSprite('cloud', 'sprites/cloud.png')
+let highScore = 0;
+let score = 0
 scene('start', () => {
     currentScene = 'start';
     let background = add([
@@ -23,6 +25,14 @@ scene('start', () => {
         z(0)
     ])
     let currTab = true;
+    let cloudRemover = add([
+        rect(10,height()),
+        pos(-130,height()/2),
+        origin('center'),
+        area(),
+        solid(),
+        z(3)
+    ])
     const clouds = () => {
         if (currentScene === "start" && currTab) {
             add([
@@ -32,12 +42,16 @@ scene('start', () => {
                 origin('center'),
                 area(),
                 move(LEFT, 50),
+                'cloud',
                 z(1)
             ])
         }
     }
     clouds()
     let cloudGenerator = setInterval(clouds, 5000);
+    cloudRemover.onCollide('cloud', (cloud) => {
+        destroy(cloud)
+    })
     let logo = add([
         sprite('logo'),
         pos(width() / 2, height() / 4),
@@ -73,6 +87,19 @@ scene('start', () => {
 go('start')
 scene('gameOver', () => {
     currentScene = 'gameOver';
+    if(score > highScore){
+        highScore = score;
+    };
+    let scoreBoard = add([
+        text(`Score: `+score),
+        pos(20, 20),
+        scale(.5, .5)
+    ])
+    let highScoreBoard = add([
+        text(`Highscore: `+highScore),
+        pos(20, 60),
+        scale(.5, .5)
+    ])
     let retryButton = add([
         text('Try Again?'),
         pos(width() / 2, height() / 2),
@@ -84,7 +111,8 @@ scene('gameOver', () => {
     retryButton.onClick(() => {
         go('game')
     });
-})
+});
+
 scene('game', () => {
     // play('bgMusic', {
     //     loop: true,
@@ -93,7 +121,7 @@ scene('game', () => {
     currentScene = 'game';
     let deathCounter = 0;
     let firstJump = true;
-    let score = 0;
+    score = 0;
     let player = add([
         sprite("stick"),
         pos(width() / 2, 0),
