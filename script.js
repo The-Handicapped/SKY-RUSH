@@ -212,6 +212,21 @@ scene('game', () => {
                     'boostPlatformTag'
                 ]);
             }
+            
+            else if ((random === 3) && (score >= 500)) {
+                add([
+                    // sprite('cloud'),
+                    // scale(.03,.03),
+                    rect(Math.floor(Math.random() * 100) + 100, 10),
+                    pos(Math.floor(Math.random() * width()), currHeight - 115),
+                    origin('center'),
+                    area(),
+                    color(rgb(139,69,19)),
+                    // solid(),
+                    // move(DOWN, 100),
+                    'oncePlatformTag'
+                ]);
+            }
             //   
             else {
                 add([
@@ -232,14 +247,21 @@ scene('game', () => {
     onUpdate(() => {
         lastPosY = player.pos.y;
     });
+
     player.onCollide("platformTag", () => {
         if (player.pos.y > lastPosY) {
             player.jump(500);
             firstJump = false;
             deathCounter = 0;
-            // play('boing', {
-            //     volume: 0.1
-            // })
+        }
+    });
+
+    player.onCollide("oncePlatformTag", (platform) => {
+        if (player.pos.y > lastPosY) {
+            player.jump(500);
+            firstJump = false;
+            deathCounter = 0;
+            destroy(platform);
         }
     });
 
