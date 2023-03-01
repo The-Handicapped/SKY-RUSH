@@ -26,8 +26,8 @@ scene('start', () => {
     ])
     let currTab = true;
     let cloudRemover = add([
-        rect(10,height()),
-        pos(-130,height()/2),
+        rect(10, height()),
+        pos(-130, height() / 2),
         origin('center'),
         area(),
         solid(),
@@ -66,7 +66,7 @@ scene('start', () => {
         origin('center')
     ])
     let startButton = add([
-        text('Click here to start'),
+        text('Click Enter to Start'),
         pos(width() / 2, height() - 90),
         origin('center'),
         scale(.5, .5),
@@ -80,23 +80,23 @@ scene('start', () => {
     window.addEventListener("focus", () => {
         currTab = true;
     });
-    startButton.onClick(() => {
+    onKeyPress('enter',() => {
         go('game')
     });
 })
 go('start')
 scene('gameOver', () => {
     currentScene = 'gameOver';
-    if(score > highScore){
+    if (score > highScore) {
         highScore = score;
     };
     let scoreBoard = add([
-        text(`Score: `+score),
+        text(`Score: ` + score),
         pos(20, 20),
         scale(.5, .5)
     ])
     let highScoreBoard = add([
-        text(`Highscore: `+highScore),
+        text(`Highscore: ` + highScore),
         pos(20, 60),
         scale(.5, .5)
     ])
@@ -157,7 +157,7 @@ scene('game', () => {
             clearInterval(platformGenerator);
             go('gameOver');
         }
-        else if(deathCounter === 6 && firstJump){
+        else if (deathCounter === 6 && firstJump) {
             destroy(player);
             every('platformTag', (platforms) => {
                 destroy(platforms);
@@ -193,20 +193,39 @@ scene('game', () => {
     ])
     let lastPosY = player.pos.y;
     let currHeight = height();
+    let direction = LEFT;
 
     const platform = () => {
         if (currentScene === "game") {
-            add([
-                // sprite('cloud'),
-                // scale(.03,.03),
-                rect(Math.floor(Math.random() * 100) + 100, 10),
-                pos(Math.floor(Math.random() * width()), currHeight - 115),
-                origin('center'),
-                area(),
-                // solid(),
-                // move(DOWN, 100),
-                'platformTag'
-            ]);
+            let random = Math.floor(Math.random() * 10);
+            if ((random === 5) && (score >= 500)) {
+                add([
+                    // sprite('cloud'),
+                    // scale(.03,.03),
+                    rect(Math.floor(Math.random() * 100) + 100, 10),
+                    pos(Math.floor(Math.random() * width()), currHeight - 115),
+                    origin('center'),
+                    area(),
+                    color(rgb(124, 252, 0)),
+                    // solid(),
+                    // move(DOWN, 100),
+                    'boostPlatformTag'
+                ]);
+            }
+            //   
+            else {
+                add([
+                    // sprite('cloud'),
+                    // scale(.03,.03),
+                    rect(Math.floor(Math.random() * 100) + 100, 10),
+                    pos(Math.floor(Math.random() * width()), currHeight - 115),
+                    origin('center'),
+                    area(),
+                    // solid(),
+                    // move(DOWN, 100),
+                    'platformTag'
+                ])
+            }
             currHeight -= 115;
         }
     }
@@ -223,11 +242,32 @@ scene('game', () => {
             // })
         }
     });
+
+    player.onCollide("boostPlatformTag", () => {
+        if (player.pos.y > lastPosY) {
+            player.jump(1000);
+            firstJump = false;
+            deathCounter = 0;
+            play('boing', {
+                volume: .5
+            })
+        }
+    });
+
+    player.onCollide("movingPlatformTag", () => {
+        if (player.pos.y > lastPosY) {
+            player.jump(500);
+            firstJump = false;
+            deathCounter = 0;
+        }
+    });
+
     floor.onCollide("platformTag", (platform) => {
         destroy(platform);
         score += 100;
         scoreBoard.text = score;
     })
+
     floor.onUpdate(() => {
         floor.pos.y = player.pos.y + 500
     })
@@ -243,6 +283,7 @@ scene('game', () => {
     //     go('gameOver');
     // })
     let platformGenerator = setInterval(platform, 500);
+
     player.onUpdate(() => {
         if (player.pos.x >= width()) {
             player.pos.x = 0
@@ -250,7 +291,9 @@ scene('game', () => {
         else if (player.pos.x <= 0) {
             player.pos.x = width();
         }
-    })
+    });
+    let moving = get('movingPlatformTag');
+
     // player.onUpdate(() => {
     //     if (player.isGrounded()) {
     //         player.jump();
