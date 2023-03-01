@@ -6,13 +6,16 @@ kaboom({
     stretch: true,
     letterbox: true,
 });
-loadSound('boing', 'boing.mp3');
-loadSound('bgMusic', 'backgroundMusic.mp3')
+loadSound('boing', 'sounds/boing.mp3');
+loadSound('bgMusic', 'sounds/backgroundMusic.mp3');
+loadSound('woosh', 'sounds/woosh.flac')
 loadSprite("stick", "sprites/stick.png");
 loadSprite("bg", "sprites/bg.jpg");
+loadSprite('gameOverBg', 'sprites/heaven.jpg')
 loadSprite('logo', 'sprites/Logo.png');
 loadSprite('homeStick', 'sprites/homeStick.png');
-loadSprite('cloud', 'sprites/cloud.png')
+loadSprite('cloud', 'sprites/cloud.png');
+loadSprite('halo', 'sprites/halo.png')
 let highScore = 0;
 let score = 0
 scene('start', () => {
@@ -87,36 +90,81 @@ scene('start', () => {
 go('start')
 scene('gameOver', () => {
     currentScene = 'gameOver';
+    let bg = add([
+        sprite("gameOverBg", {
+            width: width() * 2,
+            height: height()
+        }),
+        pos(width() / 2, height()/2),
+        origin('center'),
+        z(0)
+    ])
+    let cloud = add([
+        sprite('cloud'),
+        origin('center'),
+        pos(width()/2, height() + 80),
+        scale(.2,.2)
+    ])
+    let character = add([
+        sprite('stick'),
+        pos(width()/2, height() - 300),
+        origin('top'),
+        scale(.3,.3)
+    ])
+    let halo = add([
+        sprite('halo'),
+        pos(width()/2 - 10, height()/4 + 70),
+        origin('center'),
+        scale(.6,.6)
+    ])
+    let cloud2 = add([
+        sprite('cloud'),
+        origin('center'),
+        pos(50, height() + 80),
+        scale(.2,.2)
+    ])
+    let cloud3 = add([
+        sprite('cloud'),
+        origin('center'),
+        pos(width(), height() + 80),
+        scale(.2,.2)
+    ])
     if (score > highScore) {
         highScore = score;
     };
     let scoreBoard = add([
         text(`Score: ` + score),
-        pos(20, 20),
-        scale(.5, .5)
+        pos(20, height() -70),
+        scale(.3, .3)
     ])
     let highScoreBoard = add([
         text(`Highscore: ` + highScore),
-        pos(20, 60),
-        scale(.5, .5)
+        pos(20, height() - 40),
+        scale(.3, .3)
     ])
-    let retryButton = add([
-        text('Try Again?'),
-        pos(width() / 2, height() / 2),
+    let gameOver = add([
+        text('Game Over'),
+        pos(width() / 2, height() / 4 - 65),
         origin('center'),
-        scale(.5, .5),
+        scale(.6, .6),
+        area()
+    ])
+    let pressEnter = add([
+        text('Press Enter To Try Again'),
+        pos(width() / 2, height() / 4  -25),
+        origin('center'),
+        scale(.4, .4),
         area(),
         'start'
     ])
-    retryButton.onClick(() => {
+    onKeyPress('enter',() => {
         go('game')
     });
 });
-
 scene('game', () => {
     // play('bgMusic', {
     //     loop: true,
-    //     volume: 0.3
+    //     volume: 0.4
     // })
     currentScene = 'game';
     let deathCounter = 0;
@@ -237,9 +285,9 @@ scene('game', () => {
             player.jump(500);
             firstJump = false;
             deathCounter = 0;
-            // play('boing', {
-            //     volume: 0.1
-            // })
+            play('woosh', {
+                volume: 0.25
+            })
         }
     });
 
@@ -249,7 +297,7 @@ scene('game', () => {
             firstJump = false;
             deathCounter = 0;
             play('boing', {
-                volume: .5
+                volume: .3
             })
         }
     });
