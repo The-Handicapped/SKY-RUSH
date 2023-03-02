@@ -254,7 +254,7 @@ scene('game', () => {
 
     const platform = () => {
         if (currentScene === "game") {
-            let random = Math.floor(Math.random() * 10);
+            let random = Math.floor(Math.random() * 15);
             if ((random === 5) && (score >= 500)) {
                 add([
                     // sprite('cloud'),
@@ -353,13 +353,13 @@ scene('game', () => {
         }
     });
     
-    let enemy = get('enemy');
-    onUpdate(() => {
-        if(player.pos.y === enemy.pos.y && player.pos.x === enemy.pos.x){
-            destroy(player);
-            go('gameOver');
-        }
-    })
+    // let enemy = get('enemy');
+    // onUpdate(() => {
+    //     if(player.pos.y === enemy.pos.y && player.pos.x === enemy.pos.x){
+    //         destroy(player);
+    //         go('gameOver');
+    //     }
+    // })
 
 
 
