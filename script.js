@@ -1,5 +1,3 @@
-import kaboom from "https://unpkg.com/kaboom/dist/kaboom.mjs";
-
 let currentScene = "";
 kaboom({
     width: 640,
