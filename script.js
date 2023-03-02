@@ -1,3 +1,5 @@
+import kaboom from "https://unpkg.com/kaboom/dist/kaboom.mjs";
+
 let currentScene = "";
 kaboom({
     width: 640,
@@ -5,6 +7,8 @@ kaboom({
     stretch: true,
     letterbox: true,
 });
+
+
 loadSound('boing', 'sounds/boing.mp3');
 loadSound('bgMusic', 'sounds/backgroundMusic.mp3');
 loadSound('woosh', 'sounds/woosh.flac');
