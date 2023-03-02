@@ -1,6 +1,5 @@
 let currentScene = "";
 kaboom({
-    // set the canvas size
     width: 640,
     height: 480,
     stretch: true,
@@ -79,6 +78,15 @@ scene('start', () => {
     ])
     let startButton = add([
         text('Click Enter to Start'),
+        pos(width() / 2, height() - 90),
+        origin('center'),
+        scale(.5, .5),
+        area(),
+        z(2),
+        'start'
+    ])
+    let instructionsButton = add([
+        text('Click Shift to Start'),
         pos(width() / 2, height() - 90),
         origin('center'),
         scale(.5, .5),
@@ -212,18 +220,12 @@ scene('game', () => {
         deathCounter++;
         if (deathCounter === 3 && !firstJump) {
             destroy(player);
-            every('platformTag', (platforms) => {
-                destroy(platforms);
-            });
             clearInterval(platformGenerator);
             bgMusic.stop();
             go('gameOver');
         }
         else if (deathCounter === 6 && firstJump) {
             destroy(player);
-            every('platformTag', (platforms) => {
-                destroy(platforms);
-            });
             clearInterval(platformGenerator);
             bgMusic.stop();
             go('gameOver');
@@ -268,8 +270,6 @@ scene('game', () => {
                     pos(Math.floor(Math.random() * width()), currHeight - 115),
                     origin('center'),
                     area(),
-                    // solid(),
-                    // move(DOWN, 100),
                     'boostPlatformTag'
                 ]);
             }
@@ -281,8 +281,6 @@ scene('game', () => {
                     pos(Math.floor(Math.random() * width()), currHeight - 115),
                     origin('center'),
                     area(),
-                    // solid(),
-                    // move(DOWN, 100),
                     'oncePlatformTag'
                 ]);
             }
@@ -315,11 +313,9 @@ scene('game', () => {
                 add([
                     sprite('cloudPlatform'),
                     scale(.1,.1),
-                    // rect(Math.floor(Math.random() * 100) + 100, 10),
                     pos(Math.floor(Math.random() * width()), currHeight - 115),
                     origin('center'),
                     area(),
-                    // solid(),
                     'platformTag'
                 ])
             }
@@ -354,23 +350,9 @@ scene('game', () => {
     
     player.onCollide('enemy', (enemy) => {
         destroy(player);
-            every('platformTag', (platforms) => {
-                destroy(platforms);
-            });
-            clearInterval(platformGenerator);
-            bgMusic.stop();
-            go('gameOver');
+        bgMusic.stop();
+        go('gameOver');
     })
-
-
-
-    // player.onCollide("movingPlatformTag", () => {
-    //     if (player.pos.y > lastPosY) {
-    //         player.jump(500);
-    //         firstJump = false;
-    //         deathCounter = 0;
-    //     }
-    // });
 
     player.onCollide("enemyPlatformTag", (platform) => {
         if (player.pos.y > lastPosY) {
@@ -392,7 +374,29 @@ scene('game', () => {
         }
     });
 
+    floor.onCollide("enemy", (enemy) => {
+        destroy(enemy);
+    })
+
     floor.onCollide("platformTag", (platform) => {
+        destroy(platform);
+        score += 100;
+        scoreBoard.text = score;
+    })
+
+    floor.onCollide("boostPlatformTag", (platform) => {
+        destroy(platform);
+        score += 100;
+        scoreBoard.text = score;
+    })
+
+    floor.onCollide("oncePlatformTag", (platform) => {
+        destroy(platform);
+        score += 100;
+        scoreBoard.text = score;
+    })
+
+    floor.onCollide("enemyPlatformTag", (platform) => {
         destroy(platform);
         score += 100;
         scoreBoard.text = score;
@@ -404,14 +408,7 @@ scene('game', () => {
     floor.onCollide('startFloor', (start) => {
         destroy(start);
     })
-    // floor.onCollide('char', (character) => {
-    //     destroy(character);
-    //     every('platformTag', (platforms) => {
-    //         destroy(platforms);
-    //     });
-    //     clearInterval(platformGenerator);
-    //     go('gameOver');
-    // })
+   
     let platformGenerator = setInterval(platform, 500);
 
     player.onUpdate(() => {
@@ -422,16 +419,8 @@ scene('game', () => {
             player.pos.x = width();
         }
     });
-    // let moving = get('movingPlatformTag');
 
-    // player.onUpdate(() => {
-    //     if (player.isGrounded()) {
-    //         player.jump();
-    //         play('boing')
-    //     }
-    // })
     gravity(900);
-    // let SPEED = 900;
 
     onKeyDown("space", () => {
         if (firstJump) {
@@ -440,9 +429,7 @@ scene('game', () => {
         }
     })
 
-    // onKeyDown("space", () => {
-    //     player.jump(650);
-    // })
+
     onKeyDown("left", () => {
         player.move(-400, 0);
     })
