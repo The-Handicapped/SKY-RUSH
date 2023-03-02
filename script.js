@@ -352,12 +352,14 @@ scene('game', () => {
         }
     });
     
-    let enemy = get('enemy');
-    onUpdate(() => {
-        if(player.pos.y === enemy.pos.y && player.pos.x === enemy.pos.x){
-            destroy(player);
+    player.onCollide('enemy', (enemy) => {
+        destroy(player);
+            every('platformTag', (platforms) => {
+                destroy(platforms);
+            });
+            clearInterval(platformGenerator);
+            bgMusic.stop();
             go('gameOver');
-        }
     })
 
 
