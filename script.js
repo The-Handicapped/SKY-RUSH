@@ -286,7 +286,7 @@ scene('game', () => {
             }
 
             else if ((random === 7) && (score >= 500)) {
-                let widthSize = Math.floor(Math.random() * 150) + 100;
+                let widthSize = Math.floor(Math.random() * 100) + 100;
                 let widthPos = Math.floor(Math.random() * width())
                 add([
                     // sprite('cloud'),
@@ -352,16 +352,15 @@ scene('game', () => {
             })
         }
     });
-    
-    let enemy = get('enemy');
-    onUpdate(() => {
-        if(player.pos.y === enemy.pos.y && player.pos.x === enemy.pos.x){
-            destroy(player);
+    player.onCollide('enemy', (enemy) => {
+        destroy(player);
+            every('platformTag', (platforms) => {
+                destroy(platforms);
+            });
+            clearInterval(platformGenerator);
+            bgMusic.stop();
             go('gameOver');
-        }
     })
-
-
 
     // player.onCollide("movingPlatformTag", () => {
     //     if (player.pos.y > lastPosY) {
