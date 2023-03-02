@@ -17,6 +17,10 @@ loadSprite('gameOverBg', 'sprites/heaven.jpg')
 loadSprite('logo', 'sprites/Logo.png');
 loadSprite('homeStick', 'sprites/homeStick.png');
 loadSprite('cloud', 'sprites/cloud.png');
+loadSprite('cloudPlatform', 'sprites/cloudPlatform.png');
+loadSprite('redCloudPlatform', 'sprites/redCloudPlatform.png');
+loadSprite('greyCloudPlatform', 'sprites/greyCloudPlatform.png');
+loadSprite('greenCloudPlatform', 'sprites/greenCloudPlatform.png');
 loadSprite('halo', 'sprites/halo.png');
 loadSprite('yellowEnemy', 'sprites/yellowEnemy.png')
 let highScore = 0;
@@ -257,13 +261,11 @@ scene('game', () => {
             let random = Math.floor(Math.random() * 15);
             if ((random === 5) && (score >= 500)) {
                 add([
-                    // sprite('cloud'),
-                    // scale(.03,.03),
-                    rect(Math.floor(Math.random() * 100) + 100, 10),
+                    sprite('greenCloudPlatform'),
+                    scale(.1,.1),
                     pos(Math.floor(Math.random() * width()), currHeight - 115),
                     origin('center'),
                     area(),
-                    color(rgb(124, 252, 0)),
                     // solid(),
                     // move(DOWN, 100),
                     'boostPlatformTag'
@@ -272,13 +274,11 @@ scene('game', () => {
              
             else if ((random === 3) && (score >= 500)) {
                 add([
-                    // sprite('cloud'),
-                    // scale(.03,.03),
-                    rect(Math.floor(Math.random() * 100) + 100, 10),
+                    sprite('greyCloudPlatform'),
+                    scale(.1,.1),
                     pos(Math.floor(Math.random() * width()), currHeight - 115),
                     origin('center'),
                     area(),
-                    color(rgb(139,69,19)),
                     // solid(),
                     // move(DOWN, 100),
                     'oncePlatformTag'
@@ -289,13 +289,11 @@ scene('game', () => {
                 let widthSize = Math.floor(Math.random() * 100) + 100;
                 let widthPos = Math.floor(Math.random() * width())
                 add([
-                    // sprite('cloud'),
-                    // scale(.03,.03),
-                    rect(widthSize, 10),
+                    sprite('redCloudPlatform'),
+                    scale(.1,.1),
                     pos(widthPos, currHeight - 115),
                     origin('center'),
                     area(),
-                    color(rgb(220,20,60)),
                     // solid(),
                     // move(DOWN, 100),
                     'enemyPlatformTag'
@@ -313,9 +311,9 @@ scene('game', () => {
             //   
             else {
                 add([
-                    // sprite('cloud'),
-                    // scale(.03,.03),
-                    rect(Math.floor(Math.random() * 100) + 100, 10),
+                    sprite('cloudPlatform'),
+                    scale(.1,.1),
+                    // rect(Math.floor(Math.random() * 100) + 100, 10),
                     pos(Math.floor(Math.random() * width()), currHeight - 115),
                     origin('center'),
                     area(),
