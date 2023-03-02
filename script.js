@@ -320,7 +320,6 @@ scene('game', () => {
                     origin('center'),
                     area(),
                     // solid(),
-                    // move(DOWN, 100),
                     'platformTag'
                 ])
             }
