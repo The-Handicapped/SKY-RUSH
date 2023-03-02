@@ -86,10 +86,10 @@ scene('start', () => {
         'start'
     ])
     let instructionsButton = add([
-        text('Press Shift To Start'),
+        text('Press Shift For How To'),
         pos(width() / 2, height() - 40),
         origin('center'),
-        scale(.5, .5),
+        scale(.4, .4),
         area(),
         z(2),
         'instructions'
