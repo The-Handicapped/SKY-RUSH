@@ -93,7 +93,7 @@ scene('start', () => {
         area(),
         z(2),
         'instructions'
-    ])
+    ]);
     window.addEventListener("blur", () => {
         currTab = false;
     });
