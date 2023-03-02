@@ -11,6 +11,7 @@ loadSound('bgMusic', 'sounds/backgroundMusic.mp3');
 loadSound('woosh', 'sounds/woosh.flac');
 loadSound('death', 'sounds/death.wav');
 loadSound('scream', 'sounds/scream.mp3');
+loadSound('disappear', 'sounds/disappear.wav');
 loadSprite("stick", "sprites/stick.png");
 loadSprite("bg", "sprites/bg.jpg");
 loadSprite('gameOverBg', 'sprites/heaven.jpg')
@@ -23,6 +24,7 @@ loadSprite('greyCloudPlatform', 'sprites/greyCloudPlatform.png');
 loadSprite('greenCloudPlatform', 'sprites/greenCloudPlatform.png');
 loadSprite('halo', 'sprites/halo.png');
 loadSprite('yellowEnemy', 'sprites/yellowEnemy.png')
+
 let highScore = 0;
 let score = 0
 scene('start', () => {
@@ -119,7 +121,7 @@ scene('gameOver', () => {
         sprite('stick'),
         pos(width()/2, height() - 300),
         origin('top'),
-        scale(.3,.3)
+        scale(.8,.8)
     ])
     let halo = add([
         sprite('halo'),
@@ -184,7 +186,7 @@ scene('game', () => {
     let player = add([
         sprite("stick"),
         pos(width() / 2, 0),
-        scale(.03, .03),
+        scale(.1, .1),
         area(),
         body(),
         solid(),
@@ -384,6 +386,9 @@ scene('game', () => {
             firstJump = false;
             deathCounter = 0;
             destroy(platform);
+            play('disappear', {
+                volume: 0.1
+            });
         }
     });
 
