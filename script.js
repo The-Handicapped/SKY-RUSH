@@ -22,7 +22,7 @@ loadSprite('redCloudPlatform', 'sprites/redCloudPlatform.png');
 loadSprite('greyCloudPlatform', 'sprites/greyCloudPlatform.png');
 loadSprite('greenCloudPlatform', 'sprites/greenCloudPlatform.png');
 loadSprite('halo', 'sprites/halo.png');
-loadSprite('yellowEnemy', 'sprites/yellowEnemy.png')
+loadSprite('yellowEnemy', 'sprites/yellowEnemy.png');
 
 let highScore = 0;
 let score = 0
