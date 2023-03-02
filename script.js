@@ -77,7 +77,7 @@ scene('start', () => {
         origin('center')
     ])
     let startButton = add([
-        text('Click Enter to Start'),
+        text('Press Enter To Start'),
         pos(width() / 2, height() - 90),
         origin('center'),
         scale(.5, .5),
@@ -86,13 +86,13 @@ scene('start', () => {
         'start'
     ])
     let instructionsButton = add([
-        text('Click Shift to Start'),
-        pos(width() / 2, height() - 90),
+        text('Press Shift To Start'),
+        pos(width() / 2, height() - 40),
         origin('center'),
         scale(.5, .5),
         area(),
         z(2),
-        'start'
+        'instructions'
     ])
     window.addEventListener("blur", () => {
         currTab = false;
@@ -103,8 +103,112 @@ scene('start', () => {
     onKeyPress('enter',() => {
         go('game')
     });
+    onKeyPress('shift',() => {
+        go('gameInstructions')
+    });
 })
 go('start')
+
+scene('gameInstructions', () => {
+    let bg = add([
+        sprite("bg", {
+            width: width() * 2,
+            height: height()
+        }),
+        pos(width() / 2, height()/2),
+        origin('center'),
+        z(0)
+    ])
+    let title = add([
+        text('How To Play'),
+        scale(.5, .5),
+        z(3)
+    ])
+    let rightMove = add([
+        text('D key or right arrow key = move right'),
+        scale(.3,.3),
+        pos(0, 50),
+        z(3)
+    ])
+    let leftMove = add([
+        text('A key or left arrow key = move left'),
+        scale(.3,.3),
+        pos(0, 100),
+        z(3)
+    ])
+    let whitePlat = add([
+        sprite('cloudPlatform'),
+        scale(.1, .1),
+        pos(0, 150),
+        z(3)
+    ])
+    let whiteText = add([
+        text(' = Regular jump!'),
+        scale(.3, .3),
+        pos(153, 155),
+        z(3)
+    ])
+    let greenPlat = add([
+        sprite('greenCloudPlatform'),
+        scale(.1, .1),
+        pos(0, 200),
+        z(3)
+    ])
+    let greentText = add([
+        text(' = Super jump!'),
+        scale(.3, .3),
+        pos(153, 205),
+        z(3)
+    ])
+    let greyPlat = add([
+        sprite('greyCloudPlatform'),
+        scale(.1, .1),
+        pos(0, 250),
+        z(3)
+    ])
+    let greyText = add([
+        text(' = Cloud disappears after 1 jump!'),
+        scale(.3, .3),
+        pos(153, 255),
+        z(3)
+    ])
+    let redPlat = add([
+        sprite('redCloudPlatform'),
+        scale(.1, .1),
+        pos(0, 300),
+        z(3)
+    ])
+    let redText = add([
+        text(' = Holds enemies, WATCH OUT!'),
+        scale(.3, .3),
+        pos(153, 305),
+        z(3)
+    ])
+    let enemyIn = add([
+        sprite('yellowEnemy'),        
+        scale(.2, .2),
+        pos(0, 350),
+        z(3)
+    ])
+    let enemyText = add([
+        text(' = If you collide, GAME OVER!'),
+        scale(.3, .3),
+        pos(65, 365),
+        z(3)
+    ])
+    let instructionsButton = add([
+        text('Press R To Return To Main Menu'),
+        pos(width() / 2, height() - 40),
+        origin('center'),
+        scale(.4, .4),
+        z(3),
+        'instructions'
+    ])
+    onKeyPress('r',() => {
+        go('start')
+    });
+});
+
 scene('gameOver', () => {
     currentScene = 'gameOver';
     let death = play('death', {
